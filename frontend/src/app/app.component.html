@@ -1,0 +1,32 @@
+<p-toast />
+
+<p-confirmDialog #cd>
+  <ng-template pTemplate="headless" let-message>
+    <div
+      role="alertdialog"
+      aria-modal="true"
+      class="w-[90vw] max-w-sm rounded-2xl border border-line bg-card p-6 text-ink shadow-xl"
+    >
+      <div class="mb-5 flex items-start gap-3">
+        <span class="flex size-9 shrink-0 items-center justify-center rounded-full bg-clay/15 text-clay">
+          <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+        </span>
+        <div class="min-w-0">
+          <h2 class="font-serif text-lg leading-tight">{{ message.header }}</h2>
+          <p class="mt-1 text-sm text-muted">{{ message.message }}</p>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2">
+        <button type="button" class="btn-secondary" (click)="cd.onReject()">
+          {{ message.rejectLabel || ('CANCEL' | translate) }}
+        </button>
+        <button type="button" [class]="message.acceptButtonStyleClass || 'btn-primary'" (click)="cd.onAccept()">
+          {{ message.acceptLabel || ('CONFIRM' | translate) }}
+        </button>
+      </div>
+    </div>
+  </ng-template>
+</p-confirmDialog>
+
+<router-outlet />

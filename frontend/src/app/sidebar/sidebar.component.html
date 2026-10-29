@@ -1,0 +1,206 @@
+<div class="flex h-full flex-col gap-1 p-3">
+  <div class="flex items-center justify-between px-1 pb-2">
+    <span class="font-serif text-lg">IChat</span>
+    <button
+      type="button"
+      (click)="toggleSidebar()"
+      aria-label="Close sidebar"
+      class="rounded-md p-1.5 text-muted hover:bg-card hover:text-ink"
+    >
+      <i class="bi bi-layout-sidebar" aria-hidden="true"></i>
+    </button>
+  </div>
+
+  <button
+    type="button"
+    (click)="startNewChat()"
+    class="flex items-center gap-2 rounded-lg px-2 py-1.5 text-left text-sm hover:bg-card"
+  >
+    <span
+      class="flex size-6 items-center justify-center rounded-full bg-clay text-white"
+    >
+      <i class="bi bi-plus-lg text-xs" aria-hidden="true"></i>
+    </span>
+    {{ "NEW_CHAT" | translate }}
+  </button>
+
+  <label
+    class="flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-muted focus-within:bg-card"
+  >
+    <i class="bi bi-search" aria-hidden="true"></i>
+    <input
+      type="search"
+      [(ngModel)]="searchQuery"
+      (input)="filterDiscussions()"
+      [placeholder]="'SEARCH' | translate"
+      [attr.aria-label]="'SEARCH' | translate"
+      class="w-full bg-transparent text-ink outline-none placeholder:text-muted"
+    />
+  </label>
+
+  <nav class="mt-2 min-h-0 flex-1 overflow-y-auto" aria-label="Chat history">
+    @for (group of groups; track group.label) {
+      <p class="mb-1 mt-4 px-2 text-xs text-muted">
+        {{ group.label | translate }}
+      </p>
+
+      @for (d of group.items; track d._id) {
+        @if (editingDiscussionId === d._id) {
+          <div class="flex items-center gap-1 rounded-lg bg-card p-1">
+            <input
+              [(ngModel)]="editedDiscussionTitle"
+              maxlength="80"
+              (keydown.enter)="submitEdit()"
+              (keydown.escape)="cancelEdit()"
+              aria-label="Chat title"
+              class="min-w-0 flex-1 rounded-md bg-transparent px-1.5 py-1 text-sm outline-none ring-1 ring-line focus:ring-clay"
+            />
+            <button
+              type="button"
+              (click)="submitEdit()"
+              aria-label="Save"
+              class="rounded-md p-1 text-muted hover:text-ink"
+            >
+              <i class="bi bi-check-lg" aria-hidden="true"></i>
+            </button>
+            <button
+              type="button"
+              (click)="cancelEdit()"
+              aria-label="Cancel"
+              class="rounded-md p-1 text-muted hover:text-ink"
+            >
+              <i class="bi bi-x-lg" aria-hidden="true"></i>
+            </button>
+          </div>
+        } @else {
+          <div
+            class="group flex items-center rounded-lg hover:bg-card/60"
+            [class.bg-card]="activeDiscussionId === d._id"
+          >
+            <button
+              type="button"
+              (click)="selectDiscussion(d._id)"
+              [attr.aria-current]="activeDiscussionId === d._id ? 'true' : null"
+              class="min-w-0 flex-1 truncate px-2 py-1.5 text-left text-sm"
+            >
+              {{ d.title }}
+            </button>
+            <div
+              class="flex pr-1 group-hover:opacity-100 group-focus-within:opacity-100"
+              [class.opacity-0]="activeDiscussionId !== d._id"
+            >
+              <button
+                type="button"
+                (click)="startEdit(d)"
+                aria-label="Rename"
+                class="rounded-md p-1 text-muted hover:text-ink"
+              >
+                <i class="bi bi-pencil" aria-hidden="true"></i>
+              </button>
+              <button
+                type="button"
+                (click)="confirmDelete(d._id)"
+                aria-label="Delete"
+                class="rounded-md p-1 text-muted hover:text-ink"
+              >
+                <i class="bi bi-trash" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+        }
+      }
+    }
+
+    @if (historyDisabled) {
+      <p class="px-2 py-3 text-sm text-muted">
+        {{ "HISTORY_OFF" | translate }}
+      </p>
+    } @else if (discussions.length === 0) {
+      <p class="px-2 py-3 text-sm text-muted">
+        {{ "NO_PREVIOUS_DESCUSSIONS" | translate }}
+      </p>
+    }
+  </nav>
+
+  <div
+    #profileBox
+    class="relative border-t border-line pt-2"
+    (keydown.escape)="menuOpen = false"
+  >
+    @if (menuOpen) {
+      <div
+        role="menu"
+        class="absolute inset-x-0 bottom-full mb-2 rounded-xl border border-line bg-card p-1 shadow-lg"
+      >
+        <a
+          role="menuitem"
+          routerLink="/profile"
+          (click)="menuOpen = false"
+          class="flex items-center gap-2 rounded-lg px-2.5 py-2 text-sm hover:bg-sidebar"
+        >
+          <i class="bi bi-person" aria-hidden="true"></i
+          >{{ "Profile" | translate }}
+        </a>
+        <a
+          role="menuitem"
+          routerLink="/settings"
+          (click)="menuOpen = false"
+          class="flex items-center gap-2 rounded-lg px-2.5 py-2 text-sm hover:bg-sidebar"
+        >
+          <i class="bi bi-gear" aria-hidden="true"></i
+          >{{ "SETTINGS" | translate }}
+        </a>
+        <button
+          type="button"
+          role="menuitem"
+          (click)="toggleTheme()"
+          class="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-sm hover:bg-sidebar"
+        >
+          <i
+            class="bi"
+            [class.bi-moon]="theme.currentTheme === 'light'"
+            [class.bi-sun]="theme.currentTheme === 'dark'"
+            aria-hidden="true"
+          ></i>
+          {{
+            (theme.currentTheme === "dark" ? "LIGHT_THEME" : "DARK_THEME")
+              | translate
+          }}
+        </button>
+        <hr class="my-1 border-line" />
+        <button
+          type="button"
+          role="menuitem"
+          (click)="confirmLogout()"
+          class="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-sm text-red-600 hover:bg-sidebar dark:text-red-400"
+        >
+          <i class="bi bi-box-arrow-right" aria-hidden="true"></i
+          >{{ "LOGOUT" | translate }}
+        </button>
+      </div>
+    }
+
+    <button
+      type="button"
+      (click)="menuOpen = !menuOpen"
+      [attr.aria-expanded]="menuOpen"
+      aria-haspopup="menu"
+      class="flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left hover:bg-card"
+    >
+      @if (profile.photoUrl()) {
+        <img
+          [src]="profile.photoUrl()"
+          alt=""
+          class="size-8 rounded-full object-cover"
+        />
+      } @else {
+        <span
+          class="flex size-8 items-center justify-center rounded-full bg-ink/10 text-xs font-medium"
+          >{{ initials }}</span
+        >
+      }
+      <span class="min-w-0 flex-1 truncate text-sm">{{ displayName }}</span>
+      <i class="bi bi-chevron-expand text-muted" aria-hidden="true"></i>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+<header class="flex h-12 shrink-0 items-center gap-2 px-3">
+  @if (!sidebarVisible) {
+    <button
+      type="button"
+      (click)="toggleSidebarEvent.emit()"
+      aria-label="Open sidebar"
+      class="rounded-md p-1.5 text-muted hover:bg-sidebar hover:text-ink"
+    >
+      <i class="bi bi-layout-sidebar" aria-hidden="true"></i>
+    </button>
+  }
+  <h1 class="truncate text-sm text-muted">
+    @if (discussionTitle === null) {
+      {{ "NEW_CHAT" | translate }}
+    } @else {
+      {{ discussionTitle }}
+    }
+  </h1>
+</header>

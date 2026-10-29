@@ -1,0 +1,80 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Center vertically */
+  width: 90%;
+  max-width: 450px;
+  padding: 20px;
+  min-width: 400px;
+  box-shadow: none;
+  border: #ffffff 2px solid;
+}
+form {
+  width: 100%;
+  max-width: 700px;
+  padding: 30px;
+  border: 0px;
+}
+@media (max-width: 768px) {
+  .container {
+    max-width: 90%; /* Adjust the container width for smaller screens */
+    min-width: unset; /* Remove the fixed minimum width */
+    padding: 15px; /* Reduce padding */
+  }
+
+  form {
+    max-width: 100%; /* Allow the form to take full width */
+    padding: 20px; /* Reduce padding for smaller screens */
+  }
+}
+
+@media (max-width: 576px) {
+  .container {
+    padding: 10px; /* Further reduce padding for very small screens */
+  }
+
+  form {
+    padding: 15px; /* Further reduce form padding */
+  }
+}
+.profile-pic {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 20px;
+}
+/* Light Theme */
+.light-theme-pic {
+  background-color: #ffffff;
+  border: 2px solid #b9a7a7;
+  border-radius: 50%;
+  padding: 10px;
+}
+/* Dark Theme */
+.dark-theme-pic {
+  background-color: #78808d;
+  border: 2px solid #7a7171;
+  border-radius: 50%;
+  padding: 10px;
+}
+.profile-photo {
+  width: 170px;
+  height: 170px;
+  object-fit: cover;
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+.change-profile-pic-button {
+  bottom: 27px;
+  left: 220px;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  background-color: #2c2f33;
+  color: white;
+  border: 2px solid white;
+  width: 40px;
+  height: 40px;
+}

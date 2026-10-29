@@ -1,0 +1,82 @@
+<main class="min-h-dvh bg-page">
+  <div class="mx-auto max-w-xl px-4 py-8">
+    <button
+      type="button"
+      (click)="goToHome()"
+      class="mb-6 inline-flex items-center gap-2 text-sm text-muted hover:text-ink"
+    >
+      <i class="bi bi-arrow-left" aria-hidden="true"></i
+      >{{ "BACK_TO_HOME" | translate }}
+    </button>
+
+    <h1 class="mb-6 font-serif text-3xl">{{ "SETTINGS" | translate }}</h1>
+
+    <div class="card divide-y divide-line py-2">
+      <div class="flex items-center justify-between gap-4 py-4">
+        <label for="darkThemeToggle" class="text-[15px]">{{
+          "DARK_THEME" | translate
+        }}</label>
+        <label class="relative inline-flex cursor-pointer items-center">
+          <input
+            id="darkThemeToggle"
+            type="checkbox"
+            role="switch"
+            class="peer sr-only"
+            [checked]="isDarkTheme"
+            (change)="toggleTheme()"
+          />
+          <span
+            class="h-6 w-11 rounded-full bg-ink/20 transition-colors after:absolute after:left-0.5 after:top-0.5 after:size-5 after:rounded-full after:bg-white after:transition-transform peer-checked:bg-clay peer-checked:after:translate-x-5 peer-focus-visible:ring-2 peer-focus-visible:ring-clay/40"
+          ></span>
+        </label>
+      </div>
+
+      <div class="flex items-center justify-between gap-4 py-4">
+        <label for="languageSelect" class="text-[15px]">{{
+          "CHANGE_LANGUAGE" | translate
+        }}</label>
+        <select
+          id="languageSelect"
+          class="field w-auto"
+          (change)="changeLanguage($event)"
+        >
+          @for (l of languages; track l.code) {
+            <option [value]="l.code" [selected]="lang.current === l.code">
+              {{ l.label }}
+            </option>
+          }
+        </select>
+      </div>
+
+      <div class="flex items-center justify-between gap-4 py-4">
+        <label for="conversationHistoryToggle" class="text-[15px]">{{
+          "ENABLE_CONVERSATION_HISTORY" | translate
+        }}</label>
+        <label class="relative inline-flex cursor-pointer items-center">
+          <input
+            id="conversationHistoryToggle"
+            type="checkbox"
+            role="switch"
+            class="peer sr-only"
+            [checked]="profile.historyEnabled()"
+            [disabled]="savingHistory"
+            (change)="toggleConversationHistory($event)"
+          />
+          <span
+            class="h-6 w-11 rounded-full bg-ink/20 transition-colors after:absolute after:left-0.5 after:top-0.5 after:size-5 after:rounded-full after:bg-white after:transition-transform peer-checked:bg-clay peer-checked:after:translate-x-5 peer-focus-visible:ring-2 peer-focus-visible:ring-clay/40 peer-disabled:opacity-50"
+          ></span>
+        </label>
+      </div>
+    </div>
+
+    <button
+      type="button"
+      class="btn-danger mt-6"
+      [disabled]="deleting"
+      (click)="confirmDelete()"
+    >
+      <i class="bi bi-trash" aria-hidden="true"></i
+      >{{ "DES_DELETE" | translate }}
+    </button>
+  </div>
+</main>

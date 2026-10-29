@@ -1,0 +1,80 @@
+<main class="flex min-h-dvh items-center justify-center bg-page px-4 py-10">
+  <div class="w-full max-w-sm">
+    <div class="mb-8 text-center">
+      <h1 class="inline-flex items-center gap-2 font-serif text-3xl">
+        <i class="bi bi-robot text-clay" aria-hidden="true"></i> IChat
+      </h1>
+      <p class="mt-2 text-sm text-muted">
+        {{ "AUTH_LOGIN_SUBTITLE" | translate }}
+      </p>
+    </div>
+
+    <form
+      [formGroup]="loginForm"
+      (ngSubmit)="loginUser()"
+      class="card space-y-4"
+      novalidate
+    >
+      <div>
+        <label for="email" class="label">{{ "EMAIL" | translate }}</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          autocomplete="email"
+          class="field"
+        />
+        @if (email.touched && email.invalid) {
+          <p class="field-error">{{ "ERR_EMAIL" | translate }}</p>
+        }
+      </div>
+
+      <div>
+        <label for="password" class="label">{{ "PASSWORD" | translate }}</label>
+        <div class="relative">
+          <input
+            id="password"
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            autocomplete="current-password"
+            class="field pr-10"
+          />
+          <button
+            type="button"
+            (click)="showPassword = !showPassword"
+            [attr.aria-label]="
+              (showPassword ? 'HIDE_PASSWORD' : 'SHOW_PASSWORD') | translate
+            "
+            class="absolute inset-y-0 right-0 px-3 text-muted hover:text-ink"
+          >
+            <i
+              class="bi"
+              [class.bi-eye]="!showPassword"
+              [class.bi-eye-slash]="showPassword"
+              aria-hidden="true"
+            ></i>
+          </button>
+        </div>
+        @if (password.touched && password.invalid) {
+          <p class="field-error">{{ "ERR_REQUIRED" | translate }}</p>
+        }
+      </div>
+
+      <button type="submit" class="btn-primary w-full" [disabled]="loading">
+        @if (loading) {
+          <i class="bi bi-arrow-repeat animate-spin" aria-hidden="true"></i>
+        }
+        {{ "LOGIN" | translate }}
+      </button>
+    </form>
+
+    <p class="mt-6 text-center text-sm text-muted">
+      {{ "NO_ACCOUNT" | translate }}
+      <a
+        routerLink="/register"
+        class="text-ink underline underline-offset-4 hover:text-clay"
+        >{{ "REGISTER" | translate }}</a
+      >
+    </p>
+  </div>
+</main>

@@ -1,0 +1,251 @@
+<main class="min-h-dvh bg-page">
+  <div class="mx-auto max-w-xl px-4 py-8">
+    <button
+      type="button"
+      (click)="goToHome()"
+      class="mb-6 inline-flex items-center gap-2 text-sm text-muted hover:text-ink"
+    >
+      <i class="bi bi-arrow-left" aria-hidden="true"></i
+      >{{ "BACK_TO_HOME" | translate }}
+    </button>
+
+    <div class="mb-6 flex justify-center">
+      <div class="relative size-28">
+        <button
+          type="button"
+          (click)="showImageModal()"
+          class="size-28 overflow-hidden rounded-full border border-line"
+        >
+          @if (profile.photoUrl()) {
+            <img
+              [src]="profile.photoUrl()"
+              alt=""
+              class="size-full object-cover"
+            />
+          } @else {
+            <span
+              class="flex size-full items-center justify-center bg-ink/10 text-2xl font-medium"
+              >{{ initials }}</span
+            >
+          }
+        </button>
+        <button
+          type="button"
+          (click)="photoInput.click()"
+          [disabled]="uploading"
+          [attr.aria-label]="'CHANGE_PHOTO' | translate"
+          class="absolute bottom-0 right-0 flex size-8 items-center justify-center rounded-full border border-line bg-card text-muted shadow-sm hover:text-ink disabled:opacity-50"
+        >
+          <i class="bi bi-pencil-fill text-xs" aria-hidden="true"></i>
+        </button>
+        <input
+          #photoInput
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          (change)="onPersonalPhoto($event)"
+          class="hidden"
+        />
+      </div>
+    </div>
+
+    <p-dialog
+      [(visible)]="displayModal"
+      [modal]="true"
+      [style]="{ width: 'auto', maxWidth: '90vw' }"
+      [dismissableMask]="true"
+    >
+      <img
+        [src]="profile.photoUrl()"
+        alt=""
+        class="mx-auto max-h-[70vh] max-w-full rounded-lg"
+      />
+      <div class="mt-4 flex justify-center gap-2">
+        <button
+          type="button"
+          class="btn-secondary"
+          (click)="displayModal = false"
+        >
+          {{ "CLOSE" | translate }}
+        </button>
+        <button
+          type="button"
+          class="btn-primary"
+          (click)="photoInput.click(); displayModal = false"
+        >
+          <i class="bi bi-pencil-fill" aria-hidden="true"></i
+          >{{ "EDIT_PHOTO" | translate }}
+        </button>
+      </div>
+    </p-dialog>
+
+    <form
+      [formGroup]="profileForm"
+      (ngSubmit)="onSubmit()"
+      class="card space-y-4"
+      novalidate
+    >
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label for="first_name" class="label">{{
+            "FIRST_NAME" | translate
+          }}</label>
+          <input
+            id="first_name"
+            formControlName="first_name"
+            maxlength="50"
+            class="field"
+          />
+          @if (
+            profileForm.controls.first_name.touched &&
+            profileForm.controls.first_name.invalid
+          ) {
+            <p class="field-error">{{ "ERR_REQUIRED" | translate }}</p>
+          }
+        </div>
+        <div>
+          <label for="last_name" class="label">{{
+            "LAST_NAME" | translate
+          }}</label>
+          <input
+            id="last_name"
+            formControlName="last_name"
+            maxlength="50"
+            class="field"
+          />
+          @if (
+            profileForm.controls.last_name.touched &&
+            profileForm.controls.last_name.invalid
+          ) {
+            <p class="field-error">{{ "ERR_REQUIRED" | translate }}</p>
+          }
+        </div>
+      </div>
+
+      <div>
+        <label for="email" class="label">{{ "GMAIL" | translate }}</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          maxlength="254"
+          autocomplete="email"
+          class="field"
+        />
+        @if (
+          profileForm.controls.email.touched &&
+          profileForm.controls.email.invalid
+        ) {
+          <p class="field-error">{{ "ERR_EMAIL" | translate }}</p>
+        }
+      </div>
+
+      @if (emailChanged) {
+        <div>
+          <label for="currentPassword" class="label">{{
+            "CURRENT_PASSWORD_FOR_EMAIL" | translate
+          }}</label>
+          <input
+            id="currentPassword"
+            type="password"
+            formControlName="currentPassword"
+            autocomplete="current-password"
+            class="field"
+          />
+        </div>
+      }
+
+      <div>
+        <label for="selectedBot" class="label">{{
+          "SELECT_BOT" | translate
+        }}</label>
+        <select id="selectedBot" formControlName="selectedBot" class="field">
+          <option value="">—</option>
+          @for (bot of bots; track bot) {
+            <option [value]="bot">{{ bot }}</option>
+          }
+        </select>
+      </div>
+
+      <button
+        type="submit"
+        class="btn-primary w-full"
+        [disabled]="profileForm.invalid || saving"
+      >
+        @if (saving) {
+          <i class="bi bi-arrow-repeat animate-spin" aria-hidden="true"></i>
+        }
+        {{ "UPDATE_PROFILE" | translate }}
+      </button>
+    </form>
+
+    <form
+      [formGroup]="passwordForm"
+      (ngSubmit)="changePassword()"
+      class="card mt-4 space-y-4"
+      novalidate
+    >
+      <h2 class="font-serif text-lg">{{ "CHANGE_PASSWORD" | translate }}</h2>
+
+      <div>
+        <label for="pwCurrent" class="label">{{
+          "CURRENT_PASSWORD" | translate
+        }}</label>
+        <input
+          id="pwCurrent"
+          type="password"
+          formControlName="currentPassword"
+          autocomplete="current-password"
+          class="field"
+        />
+      </div>
+
+      <div>
+        <label for="pwNew" class="label">{{
+          "NEW_PASSWORD" | translate
+        }}</label>
+        <input
+          id="pwNew"
+          type="password"
+          formControlName="newPassword"
+          maxlength="128"
+          autocomplete="new-password"
+          class="field"
+        />
+        @if (
+          passwordForm.controls.newPassword.touched &&
+          passwordForm.controls.newPassword.invalid
+        ) {
+          <p class="field-error">{{ "ERR_PASSWORD_MIN" | translate }}</p>
+        }
+      </div>
+
+      <div>
+        <label for="pwConfirm" class="label">{{
+          "CONFIRM_PASSWORD" | translate
+        }}</label>
+        <input
+          id="pwConfirm"
+          type="password"
+          formControlName="confirmPassword"
+          maxlength="128"
+          autocomplete="new-password"
+          class="field"
+        />
+        @if (
+          passwordForm.controls.confirmPassword.touched &&
+          passwordForm.hasError("passwordMismatch")
+        ) {
+          <p class="field-error">{{ "ERR_PASSWORD_MATCH" | translate }}</p>
+        }
+      </div>
+
+      <button
+        type="submit"
+        class="btn-secondary w-full"
+        [disabled]="passwordForm.invalid || changingPassword"
+      >
+        {{ "CHANGE_PASSWORD" | translate }}
+      </button>
+    </form>
+  </div>
+</main>

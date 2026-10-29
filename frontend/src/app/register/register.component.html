@@ -1,0 +1,138 @@
+<main class="flex min-h-dvh items-center justify-center bg-page px-4 py-10">
+  <div class="w-full max-w-sm">
+    <div class="mb-8 text-center">
+      <h1 class="inline-flex items-center gap-2 font-serif text-3xl">
+        <i class="bi bi-robot text-clay" aria-hidden="true"></i> IChat
+      </h1>
+      <p class="mt-2 text-sm text-muted">
+        {{ "AUTH_REGISTER_SUBTITLE" | translate }}
+      </p>
+    </div>
+
+    <form
+      [formGroup]="registerForm"
+      (ngSubmit)="registerUser()"
+      class="card space-y-4"
+      novalidate
+    >
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label for="first_name" class="label">{{
+            "FIRST_NAME" | translate
+          }}</label>
+          <input
+            id="first_name"
+            formControlName="first_name"
+            maxlength="50"
+            autocomplete="given-name"
+            class="field"
+          />
+          @if (f.first_name.touched && f.first_name.invalid) {
+            <p class="field-error">{{ "ERR_REQUIRED" | translate }}</p>
+          }
+        </div>
+        <div>
+          <label for="last_name" class="label">{{
+            "LAST_NAME" | translate
+          }}</label>
+          <input
+            id="last_name"
+            formControlName="last_name"
+            maxlength="50"
+            autocomplete="family-name"
+            class="field"
+          />
+          @if (f.last_name.touched && f.last_name.invalid) {
+            <p class="field-error">{{ "ERR_REQUIRED" | translate }}</p>
+          }
+        </div>
+      </div>
+
+      <div>
+        <label for="email" class="label">{{ "EMAIL" | translate }}</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          maxlength="254"
+          autocomplete="email"
+          class="field"
+        />
+        @if (f.email.touched && f.email.invalid) {
+          <p class="field-error">{{ "ERR_EMAIL" | translate }}</p>
+        }
+      </div>
+
+      <div>
+        <label for="password" class="label">{{ "PASSWORD" | translate }}</label>
+        <div class="relative">
+          <input
+            id="password"
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            maxlength="128"
+            autocomplete="new-password"
+            class="field pr-10"
+          />
+          <button
+            type="button"
+            (click)="showPassword = !showPassword"
+            [attr.aria-label]="
+              (showPassword ? 'HIDE_PASSWORD' : 'SHOW_PASSWORD') | translate
+            "
+            class="absolute inset-y-0 right-0 px-3 text-muted hover:text-ink"
+          >
+            <i
+              class="bi"
+              [class.bi-eye]="!showPassword"
+              [class.bi-eye-slash]="showPassword"
+              aria-hidden="true"
+            ></i>
+          </button>
+        </div>
+        @if (f.password.touched && f.password.invalid) {
+          <p class="field-error">{{ "ERR_PASSWORD_MIN" | translate }}</p>
+        } @else {
+          <p class="mt-1 text-xs text-muted">
+            {{ "PASSWORD_HINT" | translate }}
+          </p>
+        }
+      </div>
+
+      <div>
+        <label for="confirmPassword" class="label">{{
+          "CONFIRM_PASSWORD" | translate
+        }}</label>
+        <input
+          id="confirmPassword"
+          [type]="showPassword ? 'text' : 'password'"
+          formControlName="confirmPassword"
+          maxlength="128"
+          autocomplete="new-password"
+          class="field"
+        />
+        @if (
+          f.confirmPassword.touched && registerForm.hasError("passwordMismatch")
+        ) {
+          <p class="field-error">{{ "ERR_PASSWORD_MATCH" | translate }}</p>
+        }
+      </div>
+
+      <button type="submit" class="btn-primary w-full" [disabled]="loading">
+        @if (loading) {
+          <i class="bi bi-arrow-repeat animate-spin" aria-hidden="true"></i>
+        }
+        {{ "REGISTER" | translate }}
+      </button>
+    </form>
+
+    <p class="mt-6 text-center text-sm text-muted">
+      {{ "HAVE_ACCOUNT" | translate }}
+      <a
+        routerLink="/login"
+        class="text-ink underline underline-offset-4 hover:text-clay"
+        >{{ "LOGIN" | translate }}</a
+      >
+    </p>
+  </div>
+</main>

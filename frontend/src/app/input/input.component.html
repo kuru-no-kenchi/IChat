@@ -1,0 +1,50 @@
+<div class="mx-auto w-full max-w-3xl shrink-0 px-4 pb-3">
+  <div class="rounded-2xl border border-line bg-card p-3 shadow-sm focus-within:border-clay/60">
+    <textarea
+      #box
+      rows="1"
+      [ngModel]="messageText"
+      (ngModelChange)="setText($event)"
+      (keydown.enter)="onEnter($event)"
+      [maxlength]="maxLength"
+      [readOnly]="disabled"
+      [placeholder]="'TYPE_MESSAGE' | translate"
+      [attr.aria-label]="'TYPE_MESSAGE' | translate"
+      class="block max-h-52 w-full resize-none bg-transparent text-[15px] leading-6 outline-none placeholder:text-muted"
+    ></textarea>
+
+    <div class="mt-2 flex items-center justify-between">
+      @if (voiceSupported) {
+        <button
+          type="button"
+          (pointerdown)="startRecording()"
+          (pointerup)="stopRecording()"
+          (pointerleave)="stopRecording()"
+          (pointercancel)="stopRecording()"
+          (contextmenu)="$event.preventDefault()"
+          [attr.aria-label]="'VOICE_INPUT' | translate"
+          [class.bg-clay]="recording"
+          [class.text-white]="recording"
+          class="flex size-8 items-center justify-center rounded-lg text-muted hover:bg-sidebar hover:text-ink"
+          style="touch-action: none"
+        >
+          <i class="bi bi-mic" aria-hidden="true"></i>
+        </button>
+      } @else {
+        <span></span>
+      }
+
+      <button
+        type="button"
+        (click)="sendMessage()"
+        [disabled]="disabled || !messageText.trim()"
+        [attr.aria-label]="'SEND' | translate"
+        class="flex size-8 items-center justify-center rounded-lg bg-clay text-white hover:bg-clay-hover disabled:opacity-40"
+      >
+        <i class="bi bi-arrow-up" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+
+  <p class="mt-2 text-center text-xs text-muted">{{ 'AI_DISCLAIMER' | translate }}</p>
+</div>

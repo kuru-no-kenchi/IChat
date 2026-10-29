@@ -1,0 +1,76 @@
+<div class="flex min-h-0 flex-1 flex-col" [class.justify-center]="isEmpty">
+  @if (isEmpty) {
+    <div class="px-4 pb-6 text-center">
+      <h2 class="inline-flex items-center gap-3 font-serif text-3xl">
+        <i class="bi bi-robot text-clay" aria-hidden="true"></i>
+        {{ 'GREETING' | translate }}
+      </h2>
+    </div>
+  } @else {
+    <div #chatContainer class="min-h-0 flex-1 overflow-y-auto" role="log" aria-live="polite">
+      <div class="mx-auto w-full max-w-3xl space-y-6 px-4 py-6">
+        @for (m of messages; track $index) {
+          @if (m.role === 'user') {
+            <div class="flex justify-end">
+              <div class="max-w-[85%] whitespace-pre-wrap break-words rounded-2xl border border-line bg-sidebar px-4 py-2.5 text-[15px] leading-relaxed">{{ m.content }}</div>
+            </div>
+          } @else {
+            <div>
+              <p class="whitespace-pre-wrap break-words font-serif text-base leading-7">{{ m.content }}</p>
+              <div class="mt-2 flex items-center gap-1 text-muted">
+                <i class="bi bi-robot mr-1 text-clay" aria-hidden="true"></i>
+                <button
+                  type="button"
+                  (click)="copy(m.content, $index)"
+                  [attr.aria-label]="'COPY' | translate"
+                  class="rounded-md p-1.5 hover:bg-sidebar hover:text-ink"
+                >
+                  <i class="bi" [class.bi-copy]="copiedIndex !== $index" [class.bi-check2]="copiedIndex === $index" aria-hidden="true"></i>
+                </button>
+                @if (tts.supported) {
+                  <button
+                    type="button"
+                    (click)="tts.toggle(m.content)"
+                    [attr.aria-label]="(tts.speaking() === m.content ? 'STOP_READING' : 'READ_ALOUD') | translate"
+                    class="rounded-md p-1.5 hover:bg-sidebar hover:text-ink"
+                  >
+                    <i class="bi" [class.bi-volume-up]="tts.speaking() !== m.content" [class.bi-stop-circle]="tts.speaking() === m.content" aria-hidden="true"></i>
+                  </button>
+                }
+              </div>
+            </div>
+          }
+        }
+
+        @if (isLoading) {
+          <div class="flex items-center gap-1 py-2" role="status">
+            <span class="sr-only">{{ 'ASSISTANT_TYPING' | translate }}</span>
+            <span class="size-1.5 animate-bounce rounded-full bg-muted"></span>
+            <span class="size-1.5 animate-bounce rounded-full bg-muted [animation-delay:150ms]"></span>
+            <span class="size-1.5 animate-bounce rounded-full bg-muted [animation-delay:300ms]"></span>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <app-input
+    [(messageText)]="newMessage"
+    (sendMessageEvent)="sendMessage($event)"
+    [disabled]="isLoading"
+  />
+
+  @if (isEmpty) {
+    <div class="mx-auto mt-2 flex max-w-3xl flex-wrap justify-center gap-2 px-4">
+      @for (key of suggestions; track key) {
+        <button
+          type="button"
+          (click)="useSuggestion(key)"
+          class="rounded-full border border-line px-3.5 py-1.5 text-sm text-muted hover:bg-sidebar hover:text-ink"
+        >
+          {{ key | translate }}
+        </button>
+      }
+    </div>
+  }
+</div>
