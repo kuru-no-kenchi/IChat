@@ -18,7 +18,7 @@ import { AuthService } from './services/auth.service';
 import { ThemeService } from './services/theme.service';
 import { LanguageService } from './services/language.service';
 
-const IChatPreset = definePreset(Aura, {
+const SamarPreset = definePreset(Aura, {
   semantic: {
     primary: {
       50: '#fcf3ef',
@@ -90,7 +90,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
-        preset: IChatPreset,
+        preset: SamarPreset,
         options: {
           darkModeSelector: '.dark',
           cssLayer: { name: 'primeng', order: 'theme, base, primeng' },

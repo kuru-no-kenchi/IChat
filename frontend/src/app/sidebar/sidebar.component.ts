@@ -20,6 +20,7 @@ import { AuthService } from '../services/auth.service';
 import { ChatService, DiscussionSummary } from '../services/chat.service';
 import { ProfileService } from '../services/profile.service';
 import { ThemeService } from '../services/theme.service';
+import { LogoMarkComponent } from '../logo-mark/logo-mark.component';
 
 const MAX_TITLE_LENGTH = 80;
 const DAY = 24 * 60 * 60 * 1000;
@@ -34,7 +35,7 @@ interface Group {
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   standalone: true,
-  imports: [FormsModule, RouterLink, TranslateModule],
+  imports: [FormsModule, RouterLink, TranslateModule, LogoMarkComponent],
 })
 export class SidebarComponent implements OnInit {
   @Output() discussionSelected = new EventEmitter<string>();

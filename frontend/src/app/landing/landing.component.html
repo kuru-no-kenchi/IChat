@@ -1,0 +1,84 @@
+<div class="min-h-dvh bg-page text-ink">
+  <header class="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
+    <a routerLink="/" class="inline-flex items-center gap-2 font-serif text-xl">
+      <app-logo-mark class="size-6" /> Samar
+    </a>
+
+    <div class="flex items-center gap-2">
+      <select
+        class="field w-auto py-1.5 text-sm"
+        (change)="changeLanguage($event)"
+        [attr.aria-label]="'LANGUAGE' | translate"
+      >
+        @for (l of languages; track l.code) {
+          <option [value]="l.code" [selected]="lang.current === l.code">{{ l.label }}</option>
+        }
+      </select>
+      <button
+        type="button"
+        (click)="theme.toggleTheme()"
+        [attr.aria-label]="(theme.currentTheme === 'dark' ? 'LIGHT_THEME' : 'DARK_THEME') | translate"
+        class="rounded-lg p-2 text-muted hover:bg-sidebar hover:text-ink"
+      >
+        <i class="bi" [class.bi-moon]="theme.currentTheme === 'light'" [class.bi-sun]="theme.currentTheme === 'dark'" aria-hidden="true"></i>
+      </button>
+      <a routerLink="/login" class="btn-secondary">{{ 'LOGIN' | translate }}</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="mx-auto max-w-3xl px-4 pb-12 pt-14 text-center sm:pt-20">
+      <app-logo-mark class="mx-auto mb-6 block size-10" />
+      <h1 class="font-serif text-4xl leading-tight sm:text-5xl">{{ 'LANDING_TITLE' | translate }}</h1>
+      <p class="mx-auto mt-5 max-w-xl text-lg text-muted">{{ 'LANDING_SUBTITLE' | translate }}</p>
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <a routerLink="/register" class="btn-primary px-5 py-2.5 text-base">{{ 'LANDING_CTA_START' | translate }}</a>
+        <a routerLink="/login" class="btn-secondary px-5 py-2.5 text-base">{{ 'LOGIN' | translate }}</a>
+      </div>
+    </section>
+
+    <!-- Static preview of a conversation, no API call -->
+    <section class="mx-auto max-w-2xl px-4 pb-16" [attr.aria-label]="'LANDING_PREVIEW_LABEL' | translate">
+      <div class="card space-y-5 p-5 sm:p-6" aria-hidden="true">
+        <div class="flex justify-end">
+          <div class="max-w-[85%] rounded-2xl border border-line bg-sidebar px-4 py-2.5 text-[15px] leading-relaxed">
+            {{ 'LANDING_DEMO_USER' | translate }}
+          </div>
+        </div>
+        <div>
+          <p class="font-serif text-base leading-7">{{ 'LANDING_DEMO_REPLY' | translate }}</p>
+          <div class="mt-2 flex items-center gap-1 text-muted">
+            <app-logo-mark class="mr-1 size-4" />
+            <i class="bi bi-copy p-1.5"></i>
+            <i class="bi bi-volume-up p-1.5"></i>
+          </div>
+        </div>
+        <div class="flex items-center justify-between rounded-2xl border border-line bg-card px-3 py-2.5">
+          <span class="text-[15px] text-muted">{{ 'TYPE_MESSAGE' | translate }}</span>
+          <span class="flex size-8 items-center justify-center rounded-lg bg-clay text-white">
+            <i class="bi bi-arrow-up"></i>
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <section class="mx-auto grid max-w-5xl gap-4 px-4 pb-20 sm:grid-cols-3">
+      @for (f of features; track f.title) {
+        <div class="card">
+          <i class="bi {{ f.icon }} text-xl text-clay" aria-hidden="true"></i>
+          <h2 class="mt-3 font-serif text-lg">{{ f.title | translate }}</h2>
+          <p class="mt-1 text-sm leading-relaxed text-muted">{{ f.text | translate }}</p>
+        </div>
+      }
+    </section>
+  </main>
+
+  <footer class="border-t border-line">
+    <div class="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-2 px-4 py-6 text-sm text-muted">
+      <span>© {{ year }} Samar · {{ 'LANDING_FOOTER_NOTE' | translate }}</span>
+      <a [href]="repoUrl" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 hover:text-ink">
+        <i class="bi bi-github" aria-hidden="true"></i>{{ 'LANDING_GITHUB' | translate }}
+      </a>
+    </div>
+  </footer>
+</div>

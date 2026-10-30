@@ -18,6 +18,7 @@ import { inject, provideAppInitializer } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { AuthService } from './app/services/auth.service';
 import { authInterceptor } from './app/interceptors/auth.interceptor';
+import { routes } from './app/app.routes';
 bootstrapApplication(AppComponent, {
   providers: [
     provideAppInitializer(() =>
@@ -26,23 +27,7 @@ bootstrapApplication(AppComponent, {
     provideTranslateModule(),
     MessageService,
     ConfirmationService,
-    provideRouter([
-      { path: 'home', component: HomeComponent, canActivate: [authGuard] },
-      { path: 'login', component: LoginComponent },
-      { path: 'register', component: RegisterComponent },
-      { path: '', component: LoginComponent },
-      {
-        path: 'settings',
-        component: SettingsComponent,
-        canActivate: [authGuard],
-      },
-      {
-        path: 'profile',
-        component: ProfileComponent,
-        canActivate: [authGuard],
-      },
-      { path: '**', component: NotfoundComponent, canActivate: [authGuard] },
-    ]),
+    provideRouter(routes),
     provideHttpClient(withInterceptors([authInterceptor])),
     provideAnimationsAsync(),
     providePrimeNG({

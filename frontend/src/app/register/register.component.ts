@@ -6,6 +6,7 @@ import { Router, RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import { AuthService } from '../services/auth.service';
+import { LogoMarkComponent } from '../logo-mark/logo-mark.component';
 
 const passwordsMatch = (group: AbstractControl): ValidationErrors | null =>
   group.get('password')?.value === group.get('confirmPassword')?.value ? null : { passwordMismatch: true };
@@ -14,7 +15,7 @@ const passwordsMatch = (group: AbstractControl): ValidationErrors | null =>
   selector: 'app-register',
   standalone: true,
   templateUrl: './register.component.html',
-  imports: [ReactiveFormsModule, RouterLink, TranslateModule],
+  imports: [ReactiveFormsModule, RouterLink, TranslateModule, LogoMarkComponent],
 })
 export class RegisterComponent {
   private fb = inject(FormBuilder);

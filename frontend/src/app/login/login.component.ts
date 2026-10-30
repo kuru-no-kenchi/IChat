@@ -4,11 +4,12 @@ import { Router, RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import { AuthService } from '../services/auth.service';
+import { LogoMarkComponent } from '../logo-mark/logo-mark.component';
 
 @Component({
   standalone: true,
   templateUrl: './login.component.html',
-  imports: [ReactiveFormsModule, RouterLink, TranslateModule],
+  imports: [ReactiveFormsModule, RouterLink, TranslateModule, LogoMarkComponent],
 })
 export class LoginComponent {
   private fb = inject(FormBuilder);
