@@ -25,11 +25,10 @@ build/
 .DS_Store
 backend/.gitignore
 
-#environments variables
-frontend/src/environments/
-frontend/src/app/assets
+# Environment files
 .env
 .env.*
+!.env.example
 
 # See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 

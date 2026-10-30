@@ -12,9 +12,11 @@ const hash = (t) => crypto.createHash('sha256').update(t).digest('hex');
 
 const cookieOptions = () => ({
   httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
+  secure: process.env.COOKIE_SECURE
+    ? process.env.COOKIE_SECURE === 'true'
+    : process.env.NODE_ENV === 'production',
   sameSite: process.env.COOKIE_SAMESITE || 'strict',
-  path: '/users', // the cookie is only sent to your auth routes
+  path: process.env.COOKIE_PATH || '/users',
 });
 
 const signAccessToken = (userId) =>
