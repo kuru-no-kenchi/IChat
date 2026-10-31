@@ -32,14 +32,14 @@ const registerUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    if (!email || !password) {
+    const { email, password } = req.body ?? {};
+    if (typeof email !== 'string' || !email.trim() || typeof password !== 'string' || !password) {
       return res
         .status(400)
         .json({ error: "Email and password are required." });
     }
 
-    const user = await User.findOne({ email: email.toLowerCase() }).select('+password');
+    const user = await User.findOne({ email: email.trim().toLowerCase() }).select('+password');
     const valid = user && (await bcrypt.compare(password, user.password));
     if (!valid)
       return res.status(401).json({ error: "Invalid email or password." });

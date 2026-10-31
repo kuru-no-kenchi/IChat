@@ -3,11 +3,12 @@ const express = require('express');
 const { authMiddleware } = require('../services/jwt');
 const router = express.Router();
 const { registerUser, loginUser, changePassword, deleteUser, refresh, logout, logoutAll } = require('../controllers/authentification');
-const { authLimiter } = require('../services/rateLimit');
+const { authLimiter, skipRateLimit } = require('../services/rateLimit');
 const { rateLimit } = require('express-rate-limit')
 
 const refreshLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, limit: 60, standardHeaders: true, legacyHeaders: false,
+    skip: skipRateLimit,
     message: { error: 'Too many requests. Try again later.' },
 });
 

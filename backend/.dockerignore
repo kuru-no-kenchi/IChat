@@ -6,3 +6,5 @@ backup
 .git
 Dockerfile
 *.log
+tests/
+jest.config.js
