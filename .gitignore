@@ -2,10 +2,11 @@
 node_modules/
 
 .editor
-README.md
 users_photos/
 .editorconfig
 
+*.key
+*.pem
 
 # Ignore environment variables
 .env
@@ -24,6 +25,7 @@ build/
 .idea/
 .DS_Store
 backend/.gitignore
+backup/
 
 # Environment files
 .env
@@ -75,6 +77,10 @@ Thumbs.db
 
 
 # angular cache
-.angular
+.angular/
 
 /src/environments/
+
+
+#Cerification Authority for HTTPS
+certs/
